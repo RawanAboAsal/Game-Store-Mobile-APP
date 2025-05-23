@@ -21,26 +21,34 @@ class NavBar extends StatelessWidget {
           // ✅ Nav buttons with named routes
           NavItem(title: 'Home', route: '/'),
           NavItem(title: 'News', route: '/news'),
-          NavItem(title: 'Profile', route: '/profile'),
 
           Spacer(),
+
+          // ✅ Profile icon
+          IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/profile');
+            },
+            icon: Icon(Icons.person, color: Colors.white),
+            tooltip: 'Profile',
+          ),
 
           // ✅ Sign In & Sign Up buttons
           TextButton(
             onPressed: () {
-              // TODO: Navigate or show login dialog
+              Navigator.pushNamed(context, '/signin');
             },
             child: Text("Sign In", style: TextStyle(color: Colors.white)),
           ),
           SizedBox(width: 10),
           OutlinedButton(
             onPressed: () {
-              // TODO: Navigate or show signup dialog
+              Navigator.pushNamed(context, '/register');
             },
             style: OutlinedButton.styleFrom(
               side: BorderSide(color: Colors.white),
             ),
-            child: Text("Sign Up", style: TextStyle(color: Colors.white)),
+            child: Text("Register", style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
