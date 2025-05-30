@@ -53,6 +53,7 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: Stack(
         children: [
           Container(
@@ -69,15 +70,12 @@ class _SignInPageState extends State<SignInPage> {
                 NavBar(),
                 Expanded(
                   child: SingleChildScrollView(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
                     child: Center(
                       child: ConstrainedBox(
                         constraints: BoxConstraints(maxWidth: 450),
                         child: Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 24,
-                            vertical: 32,
-                          ),
+                          padding: EdgeInsets.all(24),
                           decoration: BoxDecoration(
                             color: Colors.black.withOpacity(0.75),
                             borderRadius: BorderRadius.circular(16),
@@ -113,9 +111,14 @@ class _SignInPageState extends State<SignInPage> {
                                 TextFormField(
                                   controller: _passwordController,
                                   obscureText: _obscurePassword,
-                                  decoration: _inputDecoration(
-                                    'Password',
-                                  ).copyWith(
+                                  decoration: InputDecoration(
+                                    labelText: 'Password',
+                                    labelStyle: TextStyle(
+                                      color: Colors.white70,
+                                    ),
+                                    filled: true,
+                                    fillColor: Colors.black54,
+                                    border: OutlineInputBorder(),
                                     suffixIcon: IconButton(
                                       icon: Icon(
                                         _obscurePassword
@@ -132,22 +135,25 @@ class _SignInPageState extends State<SignInPage> {
                                     ),
                                   ),
                                   style: TextStyle(color: Colors.white),
-                                  validator:
-                                      (value) =>
-                                          value == null || value.isEmpty
-                                              ? 'Enter your password'
-                                              : null,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Enter your password';
+                                    }
+                                    return null;
+                                  },
                                 ),
-                                SizedBox(height: 20),
+                                SizedBox(height: 12),
                                 Row(
                                   children: [
                                     Checkbox(
                                       value: _rememberMe,
-                                      onChanged:
-                                          (value) => setState(
-                                            () => _rememberMe = value ?? false,
-                                          ),
-                                      activeColor: Colors.blueAccent,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _rememberMe = value ?? false;
+                                        });
+                                      },
+                                      checkColor: Colors.black,
+                                      activeColor: Colors.white,
                                     ),
                                     Text(
                                       'Remember me',
@@ -155,46 +161,41 @@ class _SignInPageState extends State<SignInPage> {
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 20),
+                                SizedBox(height: 24),
                                 _isLoading
-                                    ? Center(
-                                      child: CircularProgressIndicator(
-                                        color: Colors.blueAccent,
-                                      ),
-                                    )
+                                    ? Center(child: CircularProgressIndicator())
                                     : ElevatedButton(
                                       onPressed: _submitForm,
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.blueAccent,
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: 16,
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            8,
-                                          ),
-                                        ),
-                                        textStyle: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                        minimumSize: Size.fromHeight(45),
                                       ),
-                                      child: Text("Sign In"),
+                                      child: Text('Continue'),
                                     ),
                                 SizedBox(height: 16),
-                                Center(
-                                  child: TextButton(
-                                    onPressed: () {
-                                      Navigator.pushNamed(context, '/register');
-                                    },
-                                    child: Text(
-                                      "Don't have an account?",
-                                      style: TextStyle(
-                                        color: Colors.white70,
-                                        fontSize: 14,
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Don't have an account? ",
+                                      style: TextStyle(color: Colors.white70),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.pushNamed(
+                                          context,
+                                          '/register',
+                                        );
+                                      },
+                                      child: Text(
+                                        "Create one",
+                                        style: TextStyle(
+                                          color: Colors.blueAccent,
+                                          decoration: TextDecoration.underline,
+                                        ),
                                       ),
                                     ),
-                                  ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -215,31 +216,25 @@ class _SignInPageState extends State<SignInPage> {
 
   TextFormField _buildInputField(
     String label,
-    TextEditingController controller,
-  ) {
+    TextEditingController controller, {
+    String? Function(String?)? validator,
+  }) {
     return TextFormField(
       controller: controller,
-      decoration: _inputDecoration(label),
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: TextStyle(color: Colors.white70),
+        filled: true,
+        fillColor: Colors.black54,
+        border: OutlineInputBorder(),
+      ),
       style: TextStyle(color: Colors.white),
       validator:
-          (value) =>
-              value == null || value.isEmpty ? '$label is required.' : null,
-    );
-  }
-
-  InputDecoration _inputDecoration(String label) {
-    return InputDecoration(
-      labelText: label,
-      labelStyle: TextStyle(color: Colors.white70),
-      filled: true,
-      fillColor: Colors.black45,
-      border: OutlineInputBorder(),
-      enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.white24),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.white),
-      ),
+          validator ??
+          (value) {
+            if (value == null || value.isEmpty) return '$label is required.';
+            return null;
+          },
     );
   }
 }

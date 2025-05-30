@@ -25,7 +25,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
     if (_formKey.currentState!.validate()) {
       if (!_isOver13) {
-        setState(() => _errorMessage = 'You must confirm that you are 13 or older.');
+        setState(
+          () => _errorMessage = 'You must confirm that you are 13 or older.',
+        );
         return;
       }
 
@@ -37,9 +39,9 @@ class _RegisterPageState extends State<RegisterPage> {
           password: _passwordController.text.trim(),
         );
         setState(() => _isLoading = false);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Registered successfully!')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Registered successfully!')));
         Navigator.pushReplacementNamed(context, '/signin');
       } on FirebaseAuthException catch (e) {
         setState(() {
@@ -53,6 +55,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: Stack(
         children: [
           Container(
@@ -64,23 +67,33 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
           Container(color: Colors.black.withOpacity(0.7)),
-          Column(
-            children: [
-              NavBar(),
-              Expanded(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 80, vertical: 40),
-                        alignment: Alignment.center,
-                        child: SizedBox(
-                          width: 400,
+          SafeArea(
+            child: Column(
+              children: [
+                NavBar(),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: 450),
+                        child: Container(
+                          padding: EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.75),
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black54,
+                                blurRadius: 8,
+                                offset: Offset(0, 4),
+                              ),
+                            ],
+                          ),
                           child: Form(
                             key: _formKey,
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Text(
                                   'CREATE YOUR ACCOUNT',
@@ -92,36 +105,62 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                 ),
                                 SizedBox(height: 24),
-                                _buildInputField('Email Address', _emailController),
+                                _buildInputField(
+                                  'Email Address',
+                                  _emailController,
+                                ),
                                 SizedBox(height: 16),
                                 TextFormField(
                                   controller: _passwordController,
                                   obscureText: _obscurePassword,
-                                  decoration: _inputDecoration('Password').copyWith(
+                                  decoration: _inputDecoration(
+                                    'Password',
+                                  ).copyWith(
                                     suffixIcon: IconButton(
                                       icon: Icon(
-                                        _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                                        _obscurePassword
+                                            ? Icons.visibility_off
+                                            : Icons.visibility,
                                         color: Colors.white70,
                                       ),
-                                      onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                                      onPressed:
+                                          () => setState(
+                                            () =>
+                                                _obscurePassword =
+                                                    !_obscurePassword,
+                                          ),
                                     ),
                                   ),
                                   style: TextStyle(color: Colors.white),
-                                  validator: (value) =>
-                                      value == null || value.isEmpty ? 'Enter your password' : null,
+                                  validator:
+                                      (value) =>
+                                          value == null || value.isEmpty
+                                              ? 'Enter your password'
+                                              : null,
                                 ),
                                 SizedBox(height: 16),
                                 DropdownButtonFormField<String>(
                                   value: _selectedCountry,
                                   dropdownColor: Colors.black87,
-                                  items: countries.map((c) {
-                                    return DropdownMenuItem(
-                                      value: c,
-                                      child: Text(c, style: TextStyle(color: Colors.white)),
-                                    );
-                                  }).toList(),
-                                  onChanged: (val) => setState(() => _selectedCountry = val!),
-                                  decoration: _inputDecoration('Country of Residence'),
+                                  items:
+                                      countries.map((c) {
+                                        return DropdownMenuItem(
+                                          value: c,
+                                          child: Text(
+                                            c,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        );
+                                      }).toList(),
+                                  onChanged:
+                                      (val) => setState(
+                                        () => _selectedCountry = val!,
+                                      ),
+                                  decoration: _inputDecoration(
+                                    'Country of Residence',
+                                  ),
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 SizedBox(height: 16),
@@ -129,7 +168,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                   children: [
                                     Checkbox(
                                       value: _isOver13,
-                                      onChanged: (val) => setState(() => _isOver13 = val ?? false),
+                                      onChanged:
+                                          (val) => setState(
+                                            () => _isOver13 = val ?? false,
+                                          ),
                                       checkColor: Colors.black,
                                       activeColor: Colors.white,
                                     ),
@@ -144,58 +186,55 @@ class _RegisterPageState extends State<RegisterPage> {
                                 if (_errorMessage != null)
                                   Padding(
                                     padding: EdgeInsets.only(top: 8),
-                                    child: Text(_errorMessage!,
-                                        style: TextStyle(color: Colors.redAccent)),
+                                    child: Text(
+                                      _errorMessage!,
+                                      style: TextStyle(color: Colors.redAccent),
+                                    ),
                                   ),
-                                SizedBox(height: 16),
+                                SizedBox(height: 24),
                                 _isLoading
                                     ? Center(child: CircularProgressIndicator())
-                                    : Column(
-                                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                                        children: [
-                                          ElevatedButton(
-                                            onPressed: _submitForm,
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: Colors.blueAccent,
-                                              minimumSize: Size.fromHeight(45),
-                                            ),
-                                            child: Text("Continue"),
-                                          ),
-                                          SizedBox(height: 16),
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                "Already have an account? ",
-                                                style: TextStyle(color: Colors.white70),
-                                              ),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  Navigator.pushNamed(context, '/signin');
-                                                },
-                                                child: Text(
-                                                  "Sign in",
-                                                  style: TextStyle(
-                                                    color: Colors.blueAccent,
-                                                    decoration: TextDecoration.underline,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
+                                    : ElevatedButton(
+                                      onPressed: _submitForm,
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.blueAccent,
+                                        minimumSize: Size.fromHeight(45),
                                       ),
+                                      child: Text("Continue"),
+                                    ),
+                                SizedBox(height: 16),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Already have an account? ",
+                                      style: TextStyle(color: Colors.white70),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.pushNamed(context, '/signin');
+                                      },
+                                      child: Text(
+                                        "Sign in",
+                                        style: TextStyle(
+                                          color: Colors.blueAccent,
+                                          decoration: TextDecoration.underline,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-              Footer(),
-            ],
+                Footer(),
+              ],
+            ),
           ),
         ],
       ),
@@ -211,7 +250,8 @@ class _RegisterPageState extends State<RegisterPage> {
       controller: controller,
       decoration: _inputDecoration(label),
       style: TextStyle(color: Colors.white),
-      validator: validator ??
+      validator:
+          validator ??
           (value) {
             if (value == null || value.isEmpty) return '$label is required.';
             return null;
