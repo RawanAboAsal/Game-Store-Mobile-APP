@@ -19,45 +19,48 @@ class HomePage extends StatelessWidget {
         elevation: 0,
       ),
       backgroundColor: Colors.black,
-      body: Column(
-        children: [
-          NavBar(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: SearchBarWidget(),
-          ),
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.only(bottom: 20),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 10,
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Image.asset(
-                      'assets/1.jpeg',
-                      height: 180,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
+      body: SafeArea(
+        child: Column(
+          children: [
+            NavBar(),
+            SizedBox(height: 16), // <-- Added vertical space here
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: SearchBarWidget(),
+            ),
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.only(bottom: 20),
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 10,
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.asset(
+                        'assets/1.jpeg',
+                        height: 180,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                ),
-                _buildSectionTitle('Top Games'),
-                _buildGameGrid(mockGames),
-                _buildSectionTitle('Best Sellers'),
-                _buildGameGrid(bestSellers),
-                _buildSectionTitle('Trending Games'),
-                _buildGameGrid(trendingGames),
-                _buildSectionTitle('Top Upcoming Wishlist'),
-                _buildUpcomingWishlistList(upcomingWishlistGames),
-                Footer(),
-              ],
+                  _buildSectionTitle('Top Games'),
+                  _buildGameGrid(mockGames),
+                  _buildSectionTitle('Best Sellers'),
+                  _buildGameGrid(bestSellers),
+                  _buildSectionTitle('Trending Games'),
+                  _buildGameGrid(trendingGames),
+                  _buildSectionTitle('Top Upcoming Wishlist'),
+                  _buildUpcomingWishlistList(upcomingWishlistGames),
+                  Footer(),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

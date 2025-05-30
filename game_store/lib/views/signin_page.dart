@@ -17,52 +17,49 @@ class _SignInPageState extends State<SignInPage> {
   bool _isLoading = false;
 
   void _submitForm() async {
-  if (_formKey.currentState!.validate()) {
-    setState(() => _isLoading = true);
+    if (_formKey.currentState!.validate()) {
+      setState(() => _isLoading = true);
 
-    try {
-      final email = _accountController.text.trim();
-      final password = _passwordController.text.trim();
+      try {
+        final email = _accountController.text.trim();
+        final password = _passwordController.text.trim();
 
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Signed in successfully!')),
-      );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Signed in successfully!')));
 
-      // Navigate to home or profile page after sign in
-      Navigator.pushReplacementNamed(context, '/profile');
-
-    } on FirebaseAuthException catch (e) {
-      String message = 'An error occurred';
-      if (e.code == 'user-not-found') {
-        message = 'No user found for that email.';
-      } else if (e.code == 'wrong-password') {
-        message = 'Wrong password provided.';
+        Navigator.pushReplacementNamed(context, '/profile');
+      } on FirebaseAuthException catch (e) {
+        String message = 'An error occurred';
+        if (e.code == 'user-not-found') {
+          message = 'No user found for that email.';
+        } else if (e.code == 'wrong-password') {
+          message = 'Wrong password provided.';
+        }
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(message)));
+      } catch (e) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Something went wrong')));
+      } finally {
+        setState(() => _isLoading = false);
       }
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Something went wrong')),
-      );
-    } finally {
-      setState(() => _isLoading = false);
     }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          // Background
+          // Background image
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -71,105 +68,164 @@ class _SignInPageState extends State<SignInPage> {
               ),
             ),
           ),
-          // Content
-          Column(
-            children: [
-              NavBar(),
-              Expanded(
-                child: Center(
-                  child: Container(
-                    width: 450,
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.7),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Text(
-                            'Sign in',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+          SafeArea(
+            child: Column(
+              children: [
+                NavBar(),
+                Expanded(
+                  child: Center(
+                    child: SingleChildScrollView(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 16,
+                        horizontal: 24,
+                      ),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: 450),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 32,
                           ),
-                          SizedBox(height: 24),
-
-                          // Account name
-                          _buildInputField('Sign in with account name', _accountController),
-                          SizedBox(height: 12),
-
-                          // Password
-                          TextFormField(
-                            controller: _passwordController,
-                            obscureText: _obscurePassword,
-                            decoration: _inputDecoration('Password').copyWith(
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                                  color: Colors.white70,
-                                ),
-                                onPressed: () =>
-                                    setState(() => _obscurePassword = !_obscurePassword),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.75),
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black54,
+                                blurRadius: 8,
+                                offset: Offset(0, 4),
                               ),
-                            ),
-                            style: TextStyle(color: Colors.white),
-                            validator: (value) =>
-                                value == null || value.isEmpty ? 'Enter your password' : null,
-                          ),
-                          SizedBox(height: 12),
-
-                          // Remember me
-                          Row(
-                            children: [
-                              Checkbox(
-                                value: _rememberMe,
-                                onChanged: (value) => setState(() => _rememberMe = value ?? false),
-                                activeColor: Colors.blueAccent,
-                              ),
-                              Text('Remember me', style: TextStyle(color: Colors.white)),
                             ],
                           ),
-                          SizedBox(height: 12),
-
-                          // Sign In Button
-                          _isLoading
-                              ? Center(child: CircularProgressIndicator())
-                              : ElevatedButton(
-                                  onPressed: _submitForm,
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.blueAccent,
+                          child: Form(
+                            key: _formKey,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Text(
+                                  'Sign in',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    letterSpacing: 1.2,
                                   ),
-                                  child: Text("Sign In"),
                                 ),
-                          SizedBox(height: 12),
+                                SizedBox(height: 28),
 
-                          // Register Link
-                          Center(
-                            child: TextButton(
-                              onPressed: () {
-                                Navigator.pushNamed(context, '/register');
-                              },
-                              child: Text(
-                                "Don't have an account?",
-                                style: TextStyle(color: Colors.white70),
-                              ),
+                                // Account name input
+                                _buildInputField(
+                                  'Account name',
+                                  _accountController,
+                                ),
+                                SizedBox(height: 20),
+
+                                // Password input with toggle visibility
+                                TextFormField(
+                                  controller: _passwordController,
+                                  obscureText: _obscurePassword,
+                                  decoration: _inputDecoration(
+                                    'Password',
+                                  ).copyWith(
+                                    suffixIcon: IconButton(
+                                      icon: Icon(
+                                        _obscurePassword
+                                            ? Icons.visibility_off
+                                            : Icons.visibility,
+                                        color: Colors.white70,
+                                      ),
+                                      onPressed:
+                                          () => setState(
+                                            () =>
+                                                _obscurePassword =
+                                                    !_obscurePassword,
+                                          ),
+                                    ),
+                                  ),
+                                  style: TextStyle(color: Colors.white),
+                                  validator:
+                                      (value) =>
+                                          value == null || value.isEmpty
+                                              ? 'Enter your password'
+                                              : null,
+                                ),
+                                SizedBox(height: 20),
+
+                                // Remember me checkbox
+                                Row(
+                                  children: [
+                                    Checkbox(
+                                      value: _rememberMe,
+                                      onChanged:
+                                          (value) => setState(
+                                            () => _rememberMe = value ?? false,
+                                          ),
+                                      activeColor: Colors.blueAccent,
+                                    ),
+                                    Text(
+                                      'Remember me',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 20),
+
+                                // Sign In button or loading indicator
+                                _isLoading
+                                    ? Center(
+                                      child: CircularProgressIndicator(
+                                        color: Colors.blueAccent,
+                                      ),
+                                    )
+                                    : ElevatedButton(
+                                      onPressed: _submitForm,
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.blueAccent,
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: 16,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
+                                        ),
+                                        textStyle: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      child: Text("Sign In"),
+                                    ),
+                                SizedBox(height: 16),
+
+                                // Register link
+                                Center(
+                                  child: TextButton(
+                                    onPressed: () {
+                                      Navigator.pushNamed(context, '/register');
+                                    },
+                                    child: Text(
+                                      "Don't have an account?",
+                                      style: TextStyle(
+                                        color: Colors.white70,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              Footer(),
-            ],
+                Footer(),
+              ],
+            ),
           ),
         ],
       ),
