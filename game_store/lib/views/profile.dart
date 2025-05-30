@@ -10,10 +10,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   int avatarIndex = 0;
-  final List<String> avatarPaths = [
-    'assets/avatar1.png',
-    'assets/avatar2.png',
-  ];
+  final List<String> avatarPaths = ['assets/avatar1.png', 'assets/avatar2.png'];
 
   void _changeAvatar() {
     setState(() {
@@ -27,96 +24,144 @@ class _ProfilePageState extends State<ProfilePage> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("signin_background.jpg"), // ✅ Confirm this path is correct
+            image: AssetImage("assets/signin_background.jpg"),
             fit: BoxFit.cover,
           ),
         ),
         child: Column(
           children: [
-            NavBar(), // ✅ Your existing NavBar
+            NavBar(),
             Expanded(
-              child: Center(
-                child: Container(
-                  padding: const EdgeInsets.all(20),
-                  width: 1000,
-                  color: Colors.black.withOpacity(0.75),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Left Panel
-                      Expanded(
-                        flex: 3,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Avatar and Username in a Row
-                            Row(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  double containerWidth =
+                      constraints.maxWidth > 1000
+                          ? 1000
+                          : constraints.maxWidth * 0.95;
+
+                  return Center(
+                    child: Container(
+                      width: containerWidth,
+                      padding: const EdgeInsets.all(20),
+                      color: Colors.black.withOpacity(0.75),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                GestureDetector(
-                                  onTap: _changeAvatar,
-                                  child: CircleAvatar(
-                                    radius: 40,
-                                    backgroundImage: AssetImage(avatarPaths[avatarIndex]),
-                                    backgroundColor: Colors.grey[700],
+                                Flexible(
+                                  child: Row(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: _changeAvatar,
+                                        child: CircleAvatar(
+                                          radius: 40,
+                                          backgroundImage: AssetImage(
+                                            avatarPaths[avatarIndex],
+                                          ),
+                                          backgroundColor: Colors.grey[700],
+                                        ),
+                                      ),
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                        child: Text(
+                                          'salmamontasser265',
+                                          overflow: TextOverflow.ellipsis,
+                                          softWrap: false,
+                                          style: TextStyle(
+                                            fontSize: 22,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                const SizedBox(width: 16),
-                                Text(
-                                  'salmamontasser265',
-                                  style: TextStyle(fontSize: 22, color: Colors.white, fontWeight: FontWeight.bold),
+                                const SizedBox(height: 20),
+                                Expanded(
+                                  child: Container(
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[900],
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Recent Activity',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Expanded(
+                                          child: ListView(
+                                            children: [
+                                              _buildGameTile(
+                                                'Red Dead Redemption 2',
+                                                '240 hrs on record',
+                                                'Last played on 28 Mar',
+                                                progress:
+                                                    'Achievement Progress 24 of 51',
+                                              ),
+                                              _buildGameTile(
+                                                'Minecraft',
+                                                '2.4 hrs on record',
+                                                'Last played on 21 Nov, 2024',
+                                              ),
+                                              _buildGameTile(
+                                                'GTA',
+                                                '35 hrs on record',
+                                                'Last played on 16 Nov, 2024',
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 20),
-
-                            // Expanded Recent Activity Box
-                            Expanded(
-                              child: Container(
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[900],
-                                  borderRadius: BorderRadius.circular(8),
+                          ),
+                          const SizedBox(width: 20),
+                          Expanded(
+                            flex: 2,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Friends',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('Recent Activity', style: TextStyle(color: Colors.white, fontSize: 16)),
-                                    const SizedBox(height: 10),
-                                    Expanded(
-                                      child: ListView(
-                                        children: [
-                                          _buildGameTile('Red Dead Redemption 2', '240 hrs on record', 'Last played on 28 Mar', progress: 'Achievement Progress 24 of 51'),
-                                          _buildGameTile('Minecraft', '2.4 hrs on record', 'Last played on 21 Nov, 2024'),
-                                          _buildGameTile('GTA', '35 hrs on record', 'Last played on 16 Nov, 2024'),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
+                                const SizedBox(height: 10),
+                                _buildFriendTile(
+                                  'DeadEye',
+                                  'Last Online: 1 hr, 17 mins ago',
                                 ),
-                              ),
+                                _buildFriendTile(
+                                  'Exaygzerii',
+                                  'Last Online: 165 days ago',
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-
-                      const SizedBox(width: 20),
-
-                      // Right Panel
-                      Expanded(
-                        flex: 2,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Friends', style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold)),
-                            const SizedBox(height: 10),
-                            _buildFriendTile('DeadEye', 'Last Online: 1 hr, 17 mins ago'),
-                            _buildFriendTile('Exaygzerii', 'Last Online: 165 days ago'),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                },
               ),
             ),
           ],
@@ -125,7 +170,12 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildGameTile(String title, String hours, String lastPlayed, {String? progress}) {
+  Widget _buildGameTile(
+    String title,
+    String hours,
+    String lastPlayed, {
+    String? progress,
+  }) {
     return Card(
       color: Colors.grey[850],
       margin: const EdgeInsets.only(bottom: 10),
@@ -134,13 +184,28 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+            Text(
+              title,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             const SizedBox(height: 4),
-            Text(hours, style: TextStyle(color: Colors.grey[300], fontSize: 12)),
-            Text(lastPlayed, style: TextStyle(color: Colors.grey[400], fontSize: 12)),
+            Text(
+              hours,
+              style: TextStyle(color: Colors.grey[300], fontSize: 12),
+            ),
+            Text(
+              lastPlayed,
+              style: TextStyle(color: Colors.grey[400], fontSize: 12),
+            ),
             if (progress != null) ...[
               const SizedBox(height: 6),
-              Text(progress, style: TextStyle(color: Colors.grey[200], fontSize: 12)),
+              Text(
+                progress,
+                style: TextStyle(color: Colors.grey[200], fontSize: 12),
+              ),
             ],
           ],
         ),
@@ -156,7 +221,10 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Icon(Icons.person, color: Colors.white),
       ),
       title: Text(name, style: TextStyle(color: Colors.white)),
-      subtitle: Text(status, style: TextStyle(color: Colors.grey[400], fontSize: 12)),
+      subtitle: Text(
+        status,
+        style: TextStyle(color: Colors.grey[400], fontSize: 12),
+      ),
     );
   }
 }

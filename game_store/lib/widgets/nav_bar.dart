@@ -6,7 +6,11 @@ class NavBar extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       color: Colors.grey[900],
-      child: Row(
+      child: Wrap(
+        alignment: WrapAlignment.spaceBetween,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        spacing: 16,
+        runSpacing: 8,
         children: [
           Text(
             'Game Store',
@@ -16,15 +20,8 @@ class NavBar extends StatelessWidget {
               color: Colors.white,
             ),
           ),
-          SizedBox(width: 32),
-
-          // ✅ Nav buttons with named routes
           NavItem(title: 'Home', route: '/'),
           NavItem(title: 'News', route: '/news'),
-
-          Spacer(),
-
-          // ✅ Profile icon
           IconButton(
             onPressed: () {
               Navigator.pushNamed(context, '/profile');
@@ -32,15 +29,12 @@ class NavBar extends StatelessWidget {
             icon: Icon(Icons.person, color: Colors.white),
             tooltip: 'Profile',
           ),
-
-          // ✅ Sign In & Sign Up buttons
           TextButton(
             onPressed: () {
               Navigator.pushNamed(context, '/signin');
             },
             child: Text("Sign In", style: TextStyle(color: Colors.white)),
           ),
-          SizedBox(width: 10),
           OutlinedButton(
             onPressed: () {
               Navigator.pushNamed(context, '/register');
