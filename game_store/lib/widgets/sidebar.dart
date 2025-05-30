@@ -1,39 +1,54 @@
 import 'package:flutter/material.dart';
 
-class Sidebar extends StatefulWidget {
-  @override
-  _SidebarState createState() => _SidebarState();
-}
-
-class _SidebarState extends State<Sidebar> {
-  int selectedIndex = 0;
-
-  void _onDestinationSelected(int index) {
-    setState(() {
-      selectedIndex = index;
-    });
-
-    if (index == 0) {
-      Navigator.pushNamed(context, '/'); // Home
-    } else if (index == 1) {
-      Navigator.pushNamed(context, '/cart'); // Cart page route
-    }
-  }
-
+class Sidebar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return NavigationRail(
+    return Drawer(
       backgroundColor: Colors.grey[900],
-      selectedIndex: selectedIndex,
-      onDestinationSelected: _onDestinationSelected,
-      selectedIconTheme: IconThemeData(color: Colors.white),
-      destinations: [
-        NavigationRailDestination(icon: Icon(Icons.home), label: Text('Home')),
-        NavigationRailDestination(
-          icon: Icon(Icons.shopping_cart),
-          label: Text('Cart'),
-        ),
-      ],
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          DrawerHeader(
+            decoration: BoxDecoration(color: Colors.grey[850]),
+            child: Text(
+              'Menu',
+              style: TextStyle(color: Colors.white, fontSize: 24),
+            ),
+          ),
+          ListTile(
+            leading: Icon(Icons.home, color: Colors.white),
+            title: Text('Home', style: TextStyle(color: Colors.white)),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/');
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.shopping_cart, color: Colors.white),
+            title: Text('Cart', style: TextStyle(color: Colors.white)),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/cart');
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.video_library, color: Colors.white),
+            title: Text('Library', style: TextStyle(color: Colors.white)),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/library');
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.logout, color: Colors.white),
+            title: Text('Sign Out', style: TextStyle(color: Colors.white)),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/signin');
+            },
+          ),
+        ],
+      ),
     );
   }
 }

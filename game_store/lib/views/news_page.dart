@@ -27,40 +27,27 @@ class _NewsPageState extends State<NewsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Row(
+      backgroundColor: Colors.black,
+      drawer: Sidebar(),
+      appBar: AppBar(
+        title: Text('Latest News & Events'),
+        backgroundColor: Colors.black,
+        iconTheme: IconThemeData(color: Colors.white),
+        elevation: 0,
+      ),
+      body: Column(
         children: [
-          Sidebar(),
+          NavBar(),
           Expanded(
-            child: Column(
+            child: ListView(
+              padding: const EdgeInsets.all(20),
               children: [
-                NavBar(),
-                Expanded(
-                  child: ListView(
-                    padding: const EdgeInsets.all(20),
-                    children: [
-                      Center(
-                        child: Text(
-                          'Latest News & Events',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 20),
-
-                      // News cards
-                      ...paginatedNews.map(_buildNewsCard).toList(),
-
-                      SizedBox(height: 20),
-                      _buildPagination(),
-
-                      SizedBox(height: 30),
-                      Footer(),
-                    ],
-                  ),
-                ),
+                // News cards
+                ...paginatedNews.map(_buildNewsCard).toList(),
+                SizedBox(height: 20),
+                _buildPagination(),
+                SizedBox(height: 30),
+                Footer(),
               ],
             ),
           ),
@@ -69,7 +56,6 @@ class _NewsPageState extends State<NewsPage> {
     );
   }
 
-  // 🧩 News card with image beside text
   Widget _buildNewsCard(NewsItem news) {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
@@ -80,7 +66,6 @@ class _NewsPageState extends State<NewsPage> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 📷 Image on the left
           ClipRRect(
             borderRadius: BorderRadius.horizontal(left: Radius.circular(12)),
             child: Image.asset(
@@ -90,8 +75,6 @@ class _NewsPageState extends State<NewsPage> {
               fit: BoxFit.cover,
             ),
           ),
-
-          // 📝 Text on the right
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(12),
@@ -100,7 +83,6 @@ class _NewsPageState extends State<NewsPage> {
                 children: [
                   Text(
                     news.title,
-                    textAlign: TextAlign.left,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -110,7 +92,6 @@ class _NewsPageState extends State<NewsPage> {
                   SizedBox(height: 6),
                   Text(
                     news.description,
-                    textAlign: TextAlign.left,
                     style: TextStyle(color: Colors.grey[300], fontSize: 14),
                   ),
                 ],
@@ -122,7 +103,6 @@ class _NewsPageState extends State<NewsPage> {
     );
   }
 
-  // 🔢 Pagination buttons
   Widget _buildPagination() {
     return Center(
       child: Wrap(

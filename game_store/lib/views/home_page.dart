@@ -11,51 +11,49 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Row(
+      drawer: Sidebar(),
+      appBar: AppBar(
+        title: Text('Home'),
+        backgroundColor: Colors.black,
+        iconTheme: IconThemeData(color: Colors.white),
+        elevation: 0,
+      ),
+      backgroundColor: Colors.black,
+      body: Column(
         children: [
-          Sidebar(),
+          NavBar(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: SearchBarWidget(),
+          ),
           Expanded(
-            child: Column(
+            child: ListView(
+              padding: const EdgeInsets.only(bottom: 20),
               children: [
-                NavBar(),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 20,
                     vertical: 10,
                   ),
-                  child: SearchBarWidget(),
-                ),
-                Expanded(
-                  child: ListView(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 10,
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.asset(
-                            'assets/1.jpeg',
-                            height: 180,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      _buildSectionTitle('Top Games'),
-                      _buildGameGrid(mockGames),
-                      _buildSectionTitle('Best Sellers'),
-                      _buildGameGrid(bestSellers),
-                      _buildSectionTitle('Trending Games'),
-                      _buildGameGrid(trendingGames),
-                      _buildSectionTitle('Top Upcoming Wishlist'),
-                      _buildUpcomingWishlistList(upcomingWishlistGames),
-                      Footer(),
-                    ],
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.asset(
+                      'assets/1.jpeg',
+                      height: 180,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
+                _buildSectionTitle('Top Games'),
+                _buildGameGrid(mockGames),
+                _buildSectionTitle('Best Sellers'),
+                _buildGameGrid(bestSellers),
+                _buildSectionTitle('Trending Games'),
+                _buildGameGrid(trendingGames),
+                _buildSectionTitle('Top Upcoming Wishlist'),
+                _buildUpcomingWishlistList(upcomingWishlistGames),
+                Footer(),
               ],
             ),
           ),
