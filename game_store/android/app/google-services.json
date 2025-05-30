@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "187116751094",
+    "project_id": "game-store-dbb39",
+    "storage_bucket": "game-store-dbb39.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:187116751094:android:7510f5145351c31ea1c4d7",
+        "android_client_info": {
+          "package_name": "com.example.game_store"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCM3mD0n45C0z8bm6WALcSxi3XVe4am1JM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
