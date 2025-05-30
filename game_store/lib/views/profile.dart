@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../widgets/nav_bar.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -11,6 +12,16 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   int avatarIndex = 0;
   final List<String> avatarPaths = ['assets/avatar1.png', 'assets/avatar2.png'];
+  String? userEmail;
+
+  @override
+  void initState() {
+    super.initState();
+    final user = FirebaseAuth.instance.currentUser;
+    setState(() {
+      userEmail = user?.email ?? 'Unknown User';
+    });
+  }
 
   void _changeAvatar() {
     setState(() {
@@ -34,10 +45,9 @@ class _ProfilePageState extends State<ProfilePage> {
             Expanded(
               child: LayoutBuilder(
                 builder: (context, constraints) {
-                  double containerWidth =
-                      constraints.maxWidth > 1000
-                          ? 1000
-                          : constraints.maxWidth * 0.95;
+                  double containerWidth = constraints.maxWidth > 1000
+                      ? 1000
+                      : constraints.maxWidth * 0.95;
 
                   return Center(
                     child: Container(
@@ -67,15 +77,42 @@ class _ProfilePageState extends State<ProfilePage> {
                                       ),
                                       const SizedBox(width: 12),
                                       Expanded(
-                                        child: Text(
-                                          'salmamontasser265',
-                                          overflow: TextOverflow.ellipsis,
-                                          softWrap: false,
-                                          style: TextStyle(
-                                            fontSize: 22,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              userEmail ?? 'Loading...',
+                                              overflow: TextOverflow.ellipsis,
+                                              softWrap: false,
+                                              style: const TextStyle(
+                                                fontSize: 22,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            ElevatedButton.icon(
+                                              onPressed: () async {
+                                                await FirebaseAuth.instance
+                                                    .signOut();
+                                                if (!mounted) return;
+                                                Navigator.of(context)
+                                                    .pushReplacementNamed(
+                                                        '/signin');
+                                              },
+                                              icon: const Icon(Icons.logout),
+                                              label: const Text("Logout"),
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.red,
+                                                foregroundColor: Colors.white,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 12,
+                                                        vertical: 6),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ],
@@ -93,7 +130,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
+                                        const Text(
                                           'Recent Activity',
                                           style: TextStyle(
                                             color: Colors.white,
@@ -137,7 +174,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
+                                const Text(
                                   'Friends',
                                   style: TextStyle(
                                     fontSize: 18,
@@ -186,7 +223,7 @@ class _ProfilePageState extends State<ProfilePage> {
           children: [
             Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
@@ -218,9 +255,9 @@ class _ProfilePageState extends State<ProfilePage> {
       contentPadding: EdgeInsets.zero,
       leading: CircleAvatar(
         backgroundColor: Colors.grey[700],
-        child: Icon(Icons.person, color: Colors.white),
+        child: const Icon(Icons.person, color: Colors.white),
       ),
-      title: Text(name, style: TextStyle(color: Colors.white)),
+      title: Text(name, style: const TextStyle(color: Colors.white)),
       subtitle: Text(
         status,
         style: TextStyle(color: Colors.grey[400], fontSize: 12),

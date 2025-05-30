@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:provider/provider.dart'; // <-- add this import
+import 'package:firebase_auth/firebase_auth.dart'; // <-- Firebase Auth
+import 'package:provider/provider.dart';
 import 'firebase_options.dart';
+
 import 'views/home_page.dart';
 import 'views/news_page.dart';
 import 'views/register_page.dart';
@@ -16,7 +18,10 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(
-    ChangeNotifierProvider(create: (_) => CartProvider(), child: const MyApp()),
+    ChangeNotifierProvider(
+      create: (_) => CartProvider(),
+      child: const MyApp(),
+    ),
   );
 }
 
@@ -29,15 +34,36 @@ class MyApp extends StatelessWidget {
       title: 'Games Store',
       theme: ThemeData.dark(),
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
+      home: AuthGate(), // <--- dynamic start screen
       routes: {
-        '/': (context) => HomePage(),
         '/news': (context) => NewsPage(),
         '/profile': (context) => ProfilePage(),
         '/register': (context) => RegisterPage(),
         '/signin': (context) => SignInPage(),
         '/cart': (context) => CartPage(),
         '/library': (context) => LibraryPage(),
+      },
+    );
+  }
+}
+
+class AuthGate extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(), // Listen to login state
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        if (snapshot.hasData) {
+          return HomePage(); // Logged-in user goes to home
+        } else {
+          return SignInPage(); // Not logged-in goes to sign-in
+        }
       },
     );
   }

@@ -85,4 +85,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'game-store-dbb39.firebasestorage.app',
     measurementId: 'G-7B6N4TVEEV',
   );
+
 }
