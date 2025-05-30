@@ -1,10 +1,10 @@
 plugins {
-    id("com.android.application")
+    id("com.android.application") // Android plugin must come first
     id("kotlin-android")
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
-    id("dev.flutter.flutter-gradle-plugin")
+    id("dev.flutter.flutter-gradle-plugin") // Flutter plugin comes after Android and Kotlin
     id("com.google.gms.google-services")
 }
+
 
 android {
     namespace = "com.example.game_store"
