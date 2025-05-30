@@ -35,23 +35,24 @@ class _NewsPageState extends State<NewsPage> {
         iconTheme: IconThemeData(color: Colors.white),
         elevation: 0,
       ),
-      body: Column(
-        children: [
-          NavBar(),
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.all(20),
-              children: [
-                // News cards
-                ...paginatedNews.map(_buildNewsCard).toList(),
-                SizedBox(height: 20),
-                _buildPagination(),
-                SizedBox(height: 30),
-                Footer(),
-              ],
+      body: SafeArea(
+        child: Column(
+          children: [
+            NavBar(),
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.all(20),
+                children: [
+                  ...paginatedNews.map(_buildNewsCard).toList(),
+                  SizedBox(height: 20),
+                  _buildPagination(),
+                  SizedBox(height: 30),
+                  Footer(),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -19,20 +19,16 @@ class _SignInPageState extends State<SignInPage> {
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
-
       try {
         final email = _accountController.text.trim();
         final password = _passwordController.text.trim();
-
         await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email,
           password: password,
         );
-
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text('Signed in successfully!')));
-
         Navigator.pushReplacementNamed(context, '/profile');
       } on FirebaseAuthException catch (e) {
         String message = 'An error occurred';
@@ -59,7 +55,6 @@ class _SignInPageState extends State<SignInPage> {
     return Scaffold(
       body: Stack(
         children: [
-          // Background image
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -73,12 +68,9 @@ class _SignInPageState extends State<SignInPage> {
               children: [
                 NavBar(),
                 Expanded(
-                  child: Center(
-                    child: SingleChildScrollView(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 16,
-                        horizontal: 24,
-                      ),
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    child: Center(
                       child: ConstrainedBox(
                         constraints: BoxConstraints(maxWidth: 450),
                         child: Container(
@@ -100,7 +92,6 @@ class _SignInPageState extends State<SignInPage> {
                           child: Form(
                             key: _formKey,
                             child: Column(
-                              mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Text(
@@ -114,15 +105,11 @@ class _SignInPageState extends State<SignInPage> {
                                   ),
                                 ),
                                 SizedBox(height: 28),
-
-                                // Account name input
                                 _buildInputField(
                                   'Account name',
                                   _accountController,
                                 ),
                                 SizedBox(height: 20),
-
-                                // Password input with toggle visibility
                                 TextFormField(
                                   controller: _passwordController,
                                   obscureText: _obscurePassword,
@@ -152,8 +139,6 @@ class _SignInPageState extends State<SignInPage> {
                                               : null,
                                 ),
                                 SizedBox(height: 20),
-
-                                // Remember me checkbox
                                 Row(
                                   children: [
                                     Checkbox(
@@ -171,8 +156,6 @@ class _SignInPageState extends State<SignInPage> {
                                   ],
                                 ),
                                 SizedBox(height: 20),
-
-                                // Sign In button or loading indicator
                                 _isLoading
                                     ? Center(
                                       child: CircularProgressIndicator(
@@ -199,8 +182,6 @@ class _SignInPageState extends State<SignInPage> {
                                       child: Text("Sign In"),
                                     ),
                                 SizedBox(height: 16),
-
-                                // Register link
                                 Center(
                                   child: TextButton(
                                     onPressed: () {
@@ -240,10 +221,9 @@ class _SignInPageState extends State<SignInPage> {
       controller: controller,
       decoration: _inputDecoration(label),
       style: TextStyle(color: Colors.white),
-      validator: (value) {
-        if (value == null || value.isEmpty) return '$label is required.';
-        return null;
-      },
+      validator:
+          (value) =>
+              value == null || value.isEmpty ? '$label is required.' : null,
     );
   }
 
