@@ -13,17 +13,11 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       body: Row(
         children: [
-          // Sidebar
           Sidebar(),
-
-          // Main content
           Expanded(
             child: Column(
               children: [
-                // Top nav bar
                 NavBar(),
-
-                // Search bar
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 20,
@@ -31,13 +25,10 @@ class HomePage extends StatelessWidget {
                   ),
                   child: SearchBarWidget(),
                 ),
-
-                // Scrollable content
                 Expanded(
                   child: ListView(
                     padding: const EdgeInsets.only(bottom: 20),
                     children: [
-                      // Hero banner image
                       Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 20,
@@ -53,24 +44,14 @@ class HomePage extends StatelessWidget {
                           ),
                         ),
                       ),
-
-                      // Top Games
                       _buildSectionTitle('Top Games'),
                       _buildGameGrid(mockGames),
-
-                      // Best Sellers
                       _buildSectionTitle('Best Sellers'),
                       _buildGameGrid(bestSellers),
-
-                      // Trending Games
                       _buildSectionTitle('Trending Games'),
                       _buildGameGrid(trendingGames),
-
-                      // Top Upcoming Wishlist
                       _buildSectionTitle('Top Upcoming Wishlist'),
                       _buildUpcomingWishlistList(upcomingWishlistGames),
-
-                      // Footer
                       Footer(),
                     ],
                   ),
@@ -83,7 +64,6 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // Section title widget
   Widget _buildSectionTitle(String title) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -98,7 +78,6 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // Grid-style game cards
   Widget _buildGameGrid(List<Game> games) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -110,7 +89,6 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // News-style layout for upcoming games
   Widget _buildUpcomingWishlistList(List<Game> games) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -120,7 +98,6 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // Individual row-style card
   Widget _buildUpcomingCard(Game game) {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
@@ -130,7 +107,6 @@ class HomePage extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Image on left
           ClipRRect(
             borderRadius: BorderRadius.horizontal(left: Radius.circular(12)),
             child: Image.asset(
@@ -140,7 +116,6 @@ class HomePage extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-          // Text on right
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(12),

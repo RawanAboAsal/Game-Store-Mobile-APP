@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/game.dart';
-import '../views/game_details_page.dart';
+import '../models/cart_provider.dart';
 
 class GameCard extends StatefulWidget {
   final Game game;
@@ -14,6 +15,9 @@ class _GameCardState extends State<GameCard> {
   bool hovered = false;
 
   void _addToCart() {
+    final cartProvider = context.read<CartProvider>();
+    cartProvider.addToCart(widget.game);
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('${widget.game.title} added to cart!'),
@@ -30,15 +34,13 @@ class _GameCardState extends State<GameCard> {
       onEnter: (_) => setState(() => hovered = true),
       onExit: (_) => setState(() => hovered = false),
       child: GestureDetector(
-        onTap:
-            () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => GameDetailsPage(widget.game)),
-            ),
+        onTap: () {
+          // Your navigation or details code here
+        },
         child: AnimatedContainer(
           duration: Duration(milliseconds: 300),
           width: 180,
-          height: isUpcoming ? 260 : 300, // Shorter card if no button
+          height: isUpcoming ? 260 : 300,
           decoration: BoxDecoration(
             color: hovered ? Colors.grey[800] : Colors.grey[900],
             borderRadius: BorderRadius.circular(12),
@@ -50,7 +52,6 @@ class _GameCardState extends State<GameCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Game image
               ClipRRect(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
                 child: Image.asset(
@@ -60,8 +61,6 @@ class _GameCardState extends State<GameCard> {
                   fit: BoxFit.cover,
                 ),
               ),
-
-              // Game details and (optional) button
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
