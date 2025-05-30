@@ -80,8 +80,16 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildGameGrid(List<Game> games) {
-    return Column(
-      children: games.map((game) => _buildUpcomingCard(game)).toList(),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Wrap(
+        spacing: 20,
+        runSpacing: 20,
+        children:
+            games
+                .map((game) => SizedBox(width: 300, child: GameCard(game)))
+                .toList(),
+      ),
     );
   }
 
@@ -95,60 +103,52 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildUpcomingCard(Game game) {
-    return Center(
-      child: Container(
-        constraints: BoxConstraints(
-          maxWidth: 700,
-        ), // max card width, adjust as needed
-        margin: const EdgeInsets.symmetric(
-          vertical: 12,
-          horizontal: 12,
-        ), // margins around card
-        decoration: BoxDecoration(
-          color: Colors.grey[900],
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.horizontal(left: Radius.circular(12)),
-              child: Image.asset(
-                game.imagePath,
-                width: 200, // increased width for bigger image
-                height: 140,
-                fit: BoxFit.cover,
+    return Container(
+      margin: const EdgeInsets.only(bottom: 20),
+      decoration: BoxDecoration(
+        color: Colors.grey[900],
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.horizontal(left: Radius.circular(12)),
+            child: Image.asset(
+              game.imagePath,
+              width: 150,
+              height: 120,
+              fit: BoxFit.cover,
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    game.title,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    'Release Date: ${game.releaseDate}',
+                    style: TextStyle(color: Colors.grey[400], fontSize: 13),
+                  ),
+                  SizedBox(height: 6),
+                  Text(
+                    game.description,
+                    style: TextStyle(color: Colors.grey[300], fontSize: 14),
+                  ),
+                ],
               ),
             ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      game.title,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20, // a bit bigger text
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 6),
-                    Text(
-                      'Release Date: ${game.releaseDate}',
-                      style: TextStyle(color: Colors.grey[400], fontSize: 14),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      game.description,
-                      style: TextStyle(color: Colors.grey[300], fontSize: 16),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
