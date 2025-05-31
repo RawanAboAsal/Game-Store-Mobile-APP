@@ -109,6 +109,78 @@ For additional assistance, please contact our support team:
 🕘 *Support available Monday–Friday, 9AM–5PM EST*
 
 ---
+# Flutter Firebase Setup Guide
+
+## Installation
+Run this command to install dependencies:
+flutter pub get
+
+
+## Firebase Configuration
+1. Create a new project in the [Firebase Console](https://console.firebase.google.com/)
+2. Enable Email/Password authentication:
+   - Go to Authentication → Sign-in method
+   - Enable Email/Password provider
+3. Register your apps:
+   - Android: Add your package name
+   - iOS: Add your bundle ID
+4. Download config files:
+   - Android: Place `google-services.json` in `android/app/`
+   - iOS: Place `GoogleService-Info.plist` in `ios/Runner/`
+
+## Running the App
+### Android
+flutter run -d android
+
+### iOS
+flutter run -d ios
+
+
+### Web
+flutter run -d chrome
+
+## Development Notes
+### Hot Reload
+flutter run --hot-reload
+
+
+## Building for Release
+### Android
+flutter build apk --release
+
+
+### iOS
+flutter build ios --release
+
+
+## Testing
+Run all tests:
+flutter test
+
+
+## Troubleshooting
+### Firebase Initialization
+- Verify config files are in correct locations
+- Ensure package names match exactly
+- Run `flutter clean` and rebuild
+
+### Authentication Issues
+- Confirm Email/Password auth is enabled
+- Check internet connection
+
+### Platform-Specific Errors
+- Android: Run `flutter clean`
+- iOS: Run `pod install` in `ios` directory
+
+### Dependency Conflicts
+flutter pub upgrade
+
+
+## Support
+Contact our team for assistance:
+- Email: support@gamestoreapp.com
+- Phone: +1 (555) 123-4567
+- Hours: Monday-Friday, 9AM-5PM EST
 
 Thank you for using **Game Store App**!  
 Happy Gaming! 🎉
